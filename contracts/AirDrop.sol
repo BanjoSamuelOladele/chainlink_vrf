@@ -15,28 +15,30 @@ contract AirDrop{
     IVRF private ivrf;
 
     mapping (address => bool) private hasRegistered;
+    address[] private players;
 
 
-    constructor(address vrfAddress, uint8 uniqueNumber){
+    constructor(address vrfAddress, uint8 uniqueNumber, uint elaspedPeriod){
         ivrf = IVRF(vrfAddress);
         game = new Game(uniqueNumber);
+        elaspedParticipationPeriod = elaspedPeriod;
     }
-
 
     modifier onlyPlayer{
         require(hasRegistered[msg.sender], "you are not a valid participant");
         _;
     }
 
-
     event SuccessfullyRegisterred(address);
     event ParticipantParticipation(address indexed );
+
     error DuplicateRegistration();
     error NotAParticipantError();
     error PeriodOfParticipationEnded();
 
     function registerUser(address user) external {
         if (hasRegistered[user]) revert DuplicateRegistration();
+        players.push(user);
         hasRegistered[user] = true;
         emit SuccessfullyRegisterred(user);
     }
@@ -50,6 +52,7 @@ contract AirDrop{
         else revert PeriodOfParticipationEnded();
     }
 
+    
     // function giveReward() 
 
 }
