@@ -21,11 +21,12 @@ contract AirDrop{
     address[] private players;
 
 
-    constructor(address vrfAddress, uint8 uniqueNumber, uint elaspedPeriod){
+    constructor(address vrfAddress, uint8 uniqueNumber, uint elaspedPeriod, address tokenAddr){
         ivrf = IVRF(vrfAddress);
         game = new Game(uniqueNumber);
         elaspedParticipationPeriod = elaspedPeriod * 60;
         owner = msg.sender;
+        iWiz = IWizardERC20(tokenAddr);
     }
 
     modifier onlyPlayer{
@@ -62,14 +63,17 @@ contract AirDrop{
     }
 
     
-    function giveReward(uint totalNumberOfPossibleWinners) external onlyOwner{
+    function giveReward(uint totalNumberOfPossibleWinners, uint _amount) external onlyOwner{
         require(block.timestamp > elaspedParticipationPeriod, "not yet specified closing period");
         // uint[] storage number;
         for (uint i = 0; i < totalNumberOfPossibleWinners; i++) {
             uint result = ivrf.requestRandomWords() % game.getAllParticipants().length;
             address luckyPlayer = game.getParticipantAddressWithIndex(result);
             (uint score, ) = game.getPlayerStatus(luckyPlayer);
+            // require(iWiz.balanceOf(address(this) > 0, "not enough balance"));
+            // require(iWiz.balanceOf(address(this) >= (_amount * score), "increase address balance"));
 
+            iWiz.transfer(luckyPlayer, (score * _amount));
         }
     }
 
