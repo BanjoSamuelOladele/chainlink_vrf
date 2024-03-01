@@ -42,8 +42,10 @@ contract Game{
         
         numberOfPlayed[player] = numberOfPlayed[player] + 1;
 
-        if (numberOfPlayed[player] == 3) 
+        if (numberOfPlayed[player] == 3) {
             hasEnded[player] = true;
+            if (scores[player] == 0) scores[player] = scores[player] + 1;
+        }
     }
 
     function getPlayerStatus(address player) external view returns (uint8 score, bool elasped){
