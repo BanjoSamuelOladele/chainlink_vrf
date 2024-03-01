@@ -10,6 +10,8 @@ contract Game{
     mapping (address => uint8) private scores;
     mapping (address => bool) private hasEnded;
     mapping (address => uint8) private numberOfPlayed;
+    mapping (address => bool) private onceVisited;
+    address[] private participants;
     uint8 private uniqueNumber;
 
     constructor(uint8 _uniqueNumber) checkUniqueNumberInput(_uniqueNumber){
@@ -28,6 +30,13 @@ contract Game{
     }
     
     function playGame(address player, uint8 luckyNumber) external hasPlayerGuessLapEnded(player) checkUniqueNumberInput(luckyNumber){
+
+        if(!onceVisited[player]){
+            onceVisited[player] = true;
+            participants.push(player);
+        }
+
+
         if (luckyNumber == uniqueNumber)
             scores[player] =  scores[player] + 2;
         
@@ -40,5 +49,9 @@ contract Game{
     function getPlayerStatus(address player) external view returns (uint8 score, bool elasped){
         score = scores[player];
         elasped = hasEnded[player];
+    }
+
+    function getAllParticipants() external view returns(address[] memory){
+        return participants;
     }
 }

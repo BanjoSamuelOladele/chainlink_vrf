@@ -53,6 +53,11 @@ contract AirDrop{
     }
 
     
-    // function giveReward() 
+    function giveReward(uint totalNumberOfPossibleWinners) external{
+        require(block.timestamp > elaspedParticipationPeriod, "not yet specified closing period");
+        for (uint i = 0; i < totalNumberOfPossibleWinners; i++) {
+            uint result = ivrf.requestRandomWords();   
+        }
+    }
 
 }
