@@ -3,17 +3,24 @@
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^*;
-// import {Game} from "./Game.sol";
-import "./Game.sol";
+import {Game} from "./Game.sol";
 import "./WizardERC20.sol";
+import {IVRF} from "./IVRF.sol";
 
 contract AirDrop{
 
     uint private elaspedParticipationPeriod;
     Game private game;
-    address private onlyOwner;
+    address private owner;
+    IVRF private ivrf;
 
     mapping (address => bool) private hasRegistered;
+
+
+    constructor(address vrfAddress, uint8 uniqueNumber){
+        ivrf = IVRF(vrfAddress);
+        game = new Game(uniqueNumber);
+    }
 
 
     modifier onlyPlayer{
