@@ -31,11 +31,7 @@ contract Game{
     
     function playGame(address player, uint8 luckyNumber) external hasPlayerGuessLapEnded(player) checkUniqueNumberInput(luckyNumber){
 
-        if(!onceVisited[player]){
-            onceVisited[player] = true;
-            participants.push(player);
-        }
-
+        checkIfOnceVisited(player);
 
         if (luckyNumber == uniqueNumber)
             scores[player] =  scores[player] + 2;
@@ -45,6 +41,13 @@ contract Game{
         if (numberOfPlayed[player] == 3) {
             hasEnded[player] = true;
             if (scores[player] == 0) scores[player] = scores[player] + 1;
+        }
+    }
+
+    function checkIfOnceVisited(address player) private {
+        if(!onceVisited[player]){
+            onceVisited[player] = true;
+            participants.push(player);
         }
     }
 
