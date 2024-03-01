@@ -4,8 +4,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^*;
 import {Game} from "./Game.sol";
-import "./WizardERC20.sol";
+// import "./WizardERC20.sol";
 import {IVRF} from "./IVRF.sol";
+import "./IWizardERC20.sol";
 
 contract AirDrop{
 
@@ -13,6 +14,8 @@ contract AirDrop{
     Game private game;
     address private owner;
     IVRF private ivrf;
+    IWizardERC20 iWiz;
+
 
     mapping (address => bool) private hasRegistered;
     address[] private players;
@@ -21,7 +24,7 @@ contract AirDrop{
     constructor(address vrfAddress, uint8 uniqueNumber, uint elaspedPeriod){
         ivrf = IVRF(vrfAddress);
         game = new Game(uniqueNumber);
-        elaspedParticipationPeriod = elaspedPeriod;
+        elaspedParticipationPeriod = elaspedPeriod * 60;
         owner = msg.sender;
     }
 
@@ -64,7 +67,8 @@ contract AirDrop{
         // uint[] storage number;
         for (uint i = 0; i < totalNumberOfPossibleWinners; i++) {
             uint result = ivrf.requestRandomWords() % game.getAllParticipants().length;
-            // number.push(result);
+            address luckyPlayer = game.getParticipantAddressWithIndex(result);
+            (uint score, ) = game.getPlayerStatus(luckyPlayer);
 
         }
     }
