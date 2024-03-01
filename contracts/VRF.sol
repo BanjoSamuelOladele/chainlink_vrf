@@ -6,7 +6,7 @@ import {VRFCoordinatorV2Interface} from "@chainlink/contracts@0.8.0/src/v0.8/int
 import {VRFConsumerBaseV2} from "@chainlink/contracts@0.8.0/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 import {ConfirmedOwner} from "@chainlink/contracts@0.8.0/src/v0.8/shared/access/ConfirmedOwner.sol";
 
-contract VRFv2Consumer is VRFConsumerBaseV2, ConfirmedOwner {
+contract VRF is VRFConsumerBaseV2, ConfirmedOwner {
     event RequestSent(uint256 requestId, uint32 numWords);
     event RequestFulfilled(uint256 requestId, uint256[] randomWords);
 
