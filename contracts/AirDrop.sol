@@ -22,10 +22,16 @@ contract AirDrop{
         ivrf = IVRF(vrfAddress);
         game = new Game(uniqueNumber);
         elaspedParticipationPeriod = elaspedPeriod;
+        owner = msg.sender;
     }
 
     modifier onlyPlayer{
         require(hasRegistered[msg.sender], "you are not a valid participant");
+        _;
+    }
+
+    modifier onlyOwner{
+        require(msg.sender == owner);
         _;
     }
 
@@ -53,10 +59,13 @@ contract AirDrop{
     }
 
     
-    function giveReward(uint totalNumberOfPossibleWinners) external{
+    function giveReward(uint totalNumberOfPossibleWinners) external onlyOwner{
         require(block.timestamp > elaspedParticipationPeriod, "not yet specified closing period");
+        // uint[] storage number;
         for (uint i = 0; i < totalNumberOfPossibleWinners; i++) {
-            uint result = ivrf.requestRandomWords();   
+            uint result = ivrf.requestRandomWords() % game.getAllParticipants().length;
+            // number.push(result);
+
         }
     }
 

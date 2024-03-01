@@ -59,4 +59,8 @@ contract Game{
     function getAllParticipants() external view returns(address[] memory){
         return participants;
     }
+
+    function getParticipantAddressWithIndex(uint index) external view returns(address){
+        return participants[index];
+    }
 }
